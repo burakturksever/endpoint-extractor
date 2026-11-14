@@ -1,0 +1,69 @@
+{
+  "name": "endpoint_extractor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Discover runtime and inferred HTTP/GraphQL endpoints from web apps using Playwright, with a Next.js review UI.",
+  "scripts": {
+    "dev": "next dev -H 127.0.0.1",
+    "build": "next build",
+    "start": "next start -H 127.0.0.1",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:generate:postgres": "prisma generate --schema prisma/schema.postgres.prisma",
+    "prisma:dbpush:postgres": "prisma db push --schema prisma/schema.postgres.prisma",
+    "infra:postgres:up": "docker compose up -d postgres",
+    "infra:postgres:down": "docker compose down",
+    "extractor:worker": "tsx src/lib/runner/worker.ts"
+  },
+  "keywords": [
+    "security",
+    "pentest",
+    "endpoint-discovery",
+    "playwright",
+    "nextjs",
+    "graphql",
+    "recon"
+  ],
+  "author": "Burak Turksever",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/burakturksever/endpoint-extractor.git"
+  },
+  "engines": {
+    "node": ">=20.9"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.29.2",
+    "@babel/traverse": "^7.29.0",
+    "@prisma/client": "^6.19.3",
+    "@tailwindcss/postcss": "^4.2.4",
+    "next": "^16.2.4",
+    "playwright": "^1.59.1",
+    "postcss": "^8.5.10",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "tailwindcss": "^4.2.4",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@types/babel__traverse": "^7.28.0",
+    "@types/node": "^25.6.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitest/coverage-v8": "^4.1.4",
+    "eslint": "^9.39.4",
+    "eslint-config-next": "^16.2.4",
+    "prisma": "^6.19.3",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.4"
+  }
+}

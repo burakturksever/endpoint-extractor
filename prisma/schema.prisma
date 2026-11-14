@@ -1,0 +1,158 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Run {
+  id        String      @id @default(cuid())
+  batchRunId String?
+  targetUrl String
+  loginUrl  String?
+  status    String
+  message   String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  batchRun  BatchRun?   @relation(fields: [batchRunId], references: [id], onDelete: SetNull)
+  endpoints Endpoint[]
+  repeaterRequests RepeaterRequest[]
+  organizerItems OrganizerItem[]
+  clusterSnapshot RunClusterSnapshot?
+
+  @@index([batchRunId])
+}
+
+model RunClusterSnapshot {
+  id                 String   @id @default(cuid())
+  runId              String   @unique
+  clustersJson       String
+  assignmentsJson    String
+  endpointCountAtBuild Int
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  run                Run      @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@index([updatedAt])
+}
+
+model BatchRun {
+  id               String             @id @default(cuid())
+  status           String
+  message          String
+  maxDepth         Int
+  maxPages         Int
+  unlimitedPages Boolean            @default(false)
+  concurrency      Int
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  runs             Run[]
+  domains          DiscoveredDomain[]
+}
+
+model DiscoveredDomain {
+  id         String   @id @default(cuid())
+  batchRunId String
+  domain     String
+  sourceUrl  String
+  decision   String
+  reason     String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  batchRun   BatchRun @relation(fields: [batchRunId], references: [id], onDelete: Cascade)
+
+  @@index([batchRunId, decision])
+  @@unique([batchRunId, domain])
+}
+
+model DomainDecisionMemory {
+  domain    String   @id
+  decision  String
+  reason    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([decision])
+}
+
+model AppSettings {
+  id               String   @id @default("default")
+  llmEnabled       Boolean  @default(false)
+  lmStudioBaseUrl  String   @default("http://127.0.0.1:1234/v1")
+  lmStudioModel    String   @default("qwen2.5-7b-instruct")
+  lmStudioApiKey   String?
+  updatedAt        DateTime @updatedAt
+}
+
+model Endpoint {
+  id             String   @id @default(cuid())
+  runId          String
+  dedupeHash     String
+  originUrl      String
+  registrableDomain String
+  pageUrl        String
+  sourceType     String
+  confidence     String
+  method         String
+  rawExpression  String
+  resolvedUrl    String
+  inferredParams String
+  inferenceTrail String
+  firstSeenAt    DateTime @default(now())
+  covered        Boolean  @default(false)
+  coveredAt      DateTime?
+  run            Run      @relation(fields: [runId], references: [id], onDelete: Cascade)
+  repeaterRequests RepeaterRequest[]
+  organizerItems OrganizerItem[]
+
+  @@index([runId])
+  @@index([resolvedUrl])
+  @@index([originUrl])
+  @@index([registrableDomain])
+  @@index([runId, firstSeenAt])
+  @@index([runId, method, sourceType])
+  @@index([runId, confidence, firstSeenAt])
+  @@unique([runId, dedupeHash])
+}
+
+model RepeaterRequest {
+  id               String   @id @default(cuid())
+  runId            String
+  endpointId       String?
+  method           String
+  url              String
+  headers          String
+  body             String?
+  lastResponseStatus Int?
+  lastResponseHeaders String?
+  lastResponseBody String?
+  lastDurationMs   Int?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  run              Run      @relation(fields: [runId], references: [id], onDelete: Cascade)
+  endpoint         Endpoint? @relation(fields: [endpointId], references: [id], onDelete: SetNull)
+  organizerItems   OrganizerItem[]
+
+  @@index([runId, updatedAt])
+  @@index([endpointId])
+}
+
+model OrganizerItem {
+  id               String   @id @default(cuid())
+  runId            String
+  endpointId       String?
+  repeaterRequestId String?
+  label            String
+  description      String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  run              Run      @relation(fields: [runId], references: [id], onDelete: Cascade)
+  endpoint         Endpoint? @relation(fields: [endpointId], references: [id], onDelete: SetNull)
+  repeaterRequest  RepeaterRequest? @relation(fields: [repeaterRequestId], references: [id], onDelete: SetNull)
+
+  @@index([runId, label, updatedAt])
+  @@index([endpointId])
+  @@index([repeaterRequestId])
+}

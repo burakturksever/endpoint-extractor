@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: endpoint-extractor-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: endpoint_extractor
+      POSTGRES_PASSWORD: endpoint_extractor
+      POSTGRES_DB: endpoint_extractor
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - endpoint_extractor_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U endpoint_extractor -d endpoint_extractor"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  endpoint_extractor_pg_data:
