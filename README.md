@@ -1,7 +1,7 @@
 # Endpoint Extractor
 
 [![CI](https://github.com/burakturksever/endpoint-extractor/actions/workflows/ci.yml/badge.svg)](https://github.com/burakturksever/endpoint-extractor/actions/workflows/ci.yml)
-[![License: MIT + Commons Clause](https://img.shields.io/badge/license-MIT%20%2B%20Commons%20Clause-blue.svg)](LICENSE)
+[![License: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE)
 
 A recon tool for web application security testing. It drives a real Chromium browser with Playwright, records the API calls a page actually makes, and statically analyses the shipped JavaScript to find endpoints the crawl never triggered. You review the results in a local Next.js UI, and a **local LLM** can optionally group and explain what was found, without sending your target's data to a cloud API.
 
@@ -126,11 +126,9 @@ prisma/             SQLite and Postgres schemas
 
 ## License
 
-I want this tool to stay free for fellow penetration testers, security engineers, bug bounty hunters and anyone else who finds it useful. It was vibe-coded to help my own workflow and I'm handing it out for free. I don't want to profit from it, and I don't want anyone else to either.
+I want this tool to stay free for fellow penetration testers, security engineers, bug bounty hunters and anyone else who finds it useful. It was vibe-coded to help my own workflow, and I'm handing it out for free.
 
-It's released under the [MIT License with the Commons Clause](LICENSE):
+It's released under the [GNU General Public License v3.0](LICENSE) (or any later version):
 
-- **You can** use it for free for any work, including paid pentests, client assessments, bug bounties and your day job. You can also study it, modify it, fork it and share your fork for free.
-- **You can't** sell it, or make money from distributing it. That includes selling copies or modified versions, offering it as a hosted or managed service, and charging for support of it.
-
-Forks must keep this license notice, so the no-selling condition carries over to them too. If you're not sure whether your use is allowed, open an issue and ask.
+- **You can** use it for anything, including paid pentests, client work and your day job. You can also study it, modify it, fork it and share it.
+- **If you distribute it,** modified or not, you have to do so under the GPL too, with the source code included. Nobody can take it, close it up and ship it as a proprietary product.

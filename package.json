@@ -30,7 +30,7 @@
     "recon"
   ],
   "author": "Burak Turksever",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "GPL-3.0-or-later",
   "type": "module",
   "repository": {
     "type": "git",
