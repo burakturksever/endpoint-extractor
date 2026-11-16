@@ -1,6 +1,6 @@
 {
   "name": "endpoint_extractor",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "private": true,
   "description": "Discover runtime and inferred HTTP/GraphQL endpoints from web apps using Playwright, with a Next.js review UI.",
   "scripts": {
